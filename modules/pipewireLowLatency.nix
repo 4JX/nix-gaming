@@ -46,40 +46,42 @@ in {
       enable = true;
 
       # write extra config
-      extraConfig.pipewire = {
-        "99-lowlatency" = {
-          context = {
-            properties.default.clock.min-quantum = cfg.quantum;
-            modules = [
-              {
-                name = "libpipewire-module-rtkit";
-                flags = ["ifexists" "nofail"];
-                args = {
-                  nice.level = -15;
-                  rt = {
-                    prio = 88;
-                    time.soft = 200000;
-                    time.hard = 200000;
-                  };
-                };
-              }
-              {
-                name = "libpipewire-module-protocol-pulse";
-                args = {
-                  server.address = ["unix:native"];
-                  pulse.min = {
-                    req = qr;
-                    quantum = qr;
-                    frag = qr;
-                  };
-                };
-              }
-            ];
+      extraConfig = {
+        pipewire."99-lowlatency" = {
+          "context.properties" = {
+            "default.clock.min-quantum" = cfg.quantum;
+          };
 
-            stream.properties = {
-              node.latency = qr;
-              resample.quality = 1;
-            };
+          "context.modules" = [
+            {
+              name = "libpipewire-module-rt";
+              args = {
+                "nice.level" = -15;
+                "rt.prio" = 88;
+                "rt.time.soft" = 200000;
+                "rt.time.hard" = 200000;
+              };
+            }
+          ];
+        };
+
+        pipewire-pulse."99-lowlatency" = {
+          "context.modules" = [
+            {name = "libpipewire-module-protocol-pulse";}
+          ];
+
+          "pulse.properties" = {
+            "server.address" = ["unix:native"];
+            "pulse.min.req" = qr;
+            "pulse.min.quantum" = qr;
+            "pulse.min.frag" = qr;
+          };
+        };
+
+        client."99-lowlatency" = {
+          "stream.properties" = {
+            "node.latency" = qr;
+            "resample.quality" = 1;
           };
         };
       };
