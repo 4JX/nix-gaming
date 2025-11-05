@@ -54,7 +54,8 @@ in {
 
           "context.modules" = [
             {
-              name = "libpipewire-module-rt";
+              name = "libpipewire-module-rtkit";
+              flags = ["nofail"];
               args = {
                 "nice.level" = -15;
                 "rt.prio" = 88;
