@@ -54,8 +54,8 @@ in {
 
           "context.modules" = [
             {
-              name = "libpipewire-module-rt";
-              flags = ["nofail"];
+              name = "libpipewire-module-rtkit";
+              flags = ["ifexist" "nofail"];
               args = {
                 "nice.level" = -15;
                 "rt.prio" = 88;
@@ -64,6 +64,13 @@ in {
               };
             }
           ];
+
+          "module.rt.args" = {
+            "nice.level" = -15;
+            "rt.prio" = 88;
+            "rt.time.soft" = 200000;
+            "rt.time.hard" = 200000;
+          };
         };
 
         pipewire-pulse."99-lowlatency" = {
