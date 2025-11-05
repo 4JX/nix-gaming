@@ -67,9 +67,9 @@ in {
         };
 
         pipewire-pulse."99-lowlatency" = {
-          "context.modules" = [
-            {name = "libpipewire-module-protocol-pulse";}
-          ];
+          # "context.modules" = [
+          #   {name = "libpipewire-module-protocol-pulse";}
+          # ];
 
           "pulse.properties" = {
             "server.address" = ["unix:native"];
